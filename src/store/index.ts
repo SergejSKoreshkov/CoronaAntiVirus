@@ -7,6 +7,7 @@ interface VuexState {
   color: string;
   maximalTemp: number;
   mediumTemp: number;
+  minimalTemp: number;
 }
 
 interface VuexStore {
@@ -18,7 +19,8 @@ export default new Vuex.Store({
     state: {
         color: 'indigo',
         maximalTemp: 38.0,
-        mediumTemp: 37.0
+        mediumTemp: 37.0,
+        minimalTemp: 35.0
     },
     mutations: {
         color (state: VuexState, color: string) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="dashboard">
     <Navigation />
       <v-content>
         <v-container
@@ -10,7 +10,7 @@
             justify="center"
           >
             <v-col :cols="12">
-              <Gates />
+              <GateList />
             </v-col>
           </v-row>
         </v-container>
@@ -20,16 +20,16 @@
 </template>
 
 <script>
-import Gates from '@/components/Gates.vue'
+import GateList from '@/components/GateList.vue'
 import Navigation from '@/components/Navigation.vue'
 import Footer from '@/components/Footer.vue'
 
 export default {
-    name: 'Home',
+    name: 'Dashboard',
     components: {
         Navigation,
         Footer,
-        Gates
+        GateList
     }
 }
 </script>

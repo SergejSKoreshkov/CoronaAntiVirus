@@ -31,6 +31,7 @@
               v-for="item in items"
               :key="item.title"
               link
+              @click="$router.push(item.href)"
             >
               <v-list-item-icon>
                 <v-icon>{{ item.icon }}</v-icon>
@@ -62,9 +63,9 @@ export default Vue.extend({
     data: () => ({
         drawer: true,
         items: [
-            { title: 'Главная', icon: 'mdi-view-dashboard' },
-            { title: 'История', icon: 'mdi-history' },
-            { title: 'Выйти', icon: 'mdi-exit-run' }
+            { title: 'Главная', icon: 'mdi-view-dashboard', href: '/' },
+            { title: 'История', icon: 'mdi-history', href: '/history' },
+            { title: 'Выйти', icon: 'mdi-exit-run', href: '/' }
         ]
     })
 })

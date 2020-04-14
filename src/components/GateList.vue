@@ -1,5 +1,5 @@
 <template>
-    <div class="gates">
+    <div class="gatelist">
       <v-data-table
         :headers="headers"
         :items="dataset"
