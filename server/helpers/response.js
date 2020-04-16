@@ -7,17 +7,16 @@
  */
 
 module.exports = (res, { status, error = false, data = {} }) => {
+    status = status || (error ? 'Bad Request' : 'OK')
 
-  status = status ? status : (error ? 'Bad Request' : 'OK')
+    const responseObject = {
+        error: { name: error.name, message: error.message },
+        data: data || {},
+        status,
+        timestamp: new Date().getTime()
+    }
 
-  const responseObject = {
-    error: { name: error.name, message: error.message },
-    data: data || {},
-    status,
-    timestamp: new Date().getTime()
-  }
-
-  switch (status) {
+    switch (status) {
     // 1XX Informational
     case 'Continue': res.status(100); break
     case 'Switching Protocols': res.status(101); break
@@ -61,7 +60,7 @@ module.exports = (res, { status, error = false, data = {} }) => {
     case 'Unsupported Media Type': res.status(415); break
     case 'Requested Range Not Satisfiable': res.status(416); break
     case 'Expectation Failed': res.status(417); break
-    case `I'm a teapot`: res.status(418); break
+    case 'I\'m a teapot': res.status(418); break
     case 'Misdirected Request': res.status(421); break
     case 'Unprocessable Entity': res.status(422); break
     case 'Locked': res.status(423); break
@@ -86,7 +85,7 @@ module.exports = (res, { status, error = false, data = {} }) => {
     case 'Not Extended': res.status(510); break
     case 'Network Authentication Required': res.status(511); break
     case 'Network Connect Timeout Error': res.status(599); break
-  }
+    }
 
-  return res.json(responseObject)
+    return res.json(responseObject)
 }

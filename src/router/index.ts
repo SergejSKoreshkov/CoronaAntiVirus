@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
 import History from '../views/History.vue'
+import Login from '../views/Login.vue'
 
 Vue.use(VueRouter)
 
@@ -15,6 +16,11 @@ const routes: Array<RouteConfig> = [
         path: '/history',
         name: 'History',
         component: History
+    },
+    {
+        path: '/login',
+        name: 'Login',
+        component: Login
     }
 ]
 

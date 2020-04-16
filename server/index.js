@@ -1,14 +1,13 @@
-console.log(__dirname)
-
 const dotenv = require('dotenv')
 dotenv.config({ path: '.env' })
+
+const response = require('./helpers/response')
 
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const morgan = require('morgan')
 
 const db = require('./database/database')
-db.init()
 
 const colors = require('colors')
 
@@ -27,12 +26,21 @@ app.use(bodyParser.json({ extended: true }))
 app.use(morgan(`${colors.green(':method')} ${colors.cyan(':url')} ${colors.magenta(':status')} :response-time ms`))
 
 app.use('/api/auth/', require('./routes/routes.api.auth'))
+app.use('/api/', require('./routes/routes.api'))
 
 app.use('/', express.static('dist'))
+
+app.all('/api/*', (req, res) => {
+    response(res, { status: 'Not Found', error: new Error('notFound') })
+})
 
 app.all('*', (req, res) => {
     res.redirect('/')
 })
+
+db.initHistory()
+    .then(db.initUsers)
+    .catch(console.log)
 
 app.listen(process.env.PORT, () => {
     console.log(colors.green(`Server started at ${colors.cyan(`http://localhost:${process.env.PORT}`)}`))

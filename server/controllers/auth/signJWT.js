@@ -10,8 +10,7 @@ const authenticatePromise = (login) => new Promise((resolve, reject) => {
 module.exports = (req, res, next) => {
     authenticatePromise(req.user)
         .then(user => {
-            res.redirect(`http://localhost:${process.env.PORT}/?token=${user.token}`)
-            // response(res, { status: 'OK', data: { token: `${user.token}`, user: user.user } })
+            response(res, { status: 'OK', data: { token: user.token } })
         })
         .catch(err => response(res, { status: 'Bad Request', error: err }))
 }

@@ -5,6 +5,9 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import VueApexCharts from 'vue-apexcharts'
 
+const VueCookie = require('vue-cookie')
+
+Vue.use(VueCookie)
 Vue.component('apexchart', VueApexCharts)
 
 Vue.config.productionTip = false
