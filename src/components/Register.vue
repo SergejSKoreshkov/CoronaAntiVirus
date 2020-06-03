@@ -6,7 +6,7 @@
                         dark
                         elevation="0"
                     >
-                        <v-toolbar-title>Вход</v-toolbar-title>
+                        <v-toolbar-title>Регистрация пользователя</v-toolbar-title>
                         <v-spacer />
                     </v-toolbar>
                     <v-card-text>
@@ -30,7 +30,7 @@
                         </v-form>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn color="blue" :text="true" @click="loginLocal">Войти</v-btn>
+                        <v-btn color="blue" :text="true" @click="loginLocal">Зарегистрировать</v-btn>
                     </v-card-actions>
                     </v-card>
     </div>
@@ -52,7 +52,7 @@ export default Vue.extend({
     methods: {
         loginLocal () {
             axios.post(
-                'http://localhost:8080/api/auth/local',
+                'http://localhost:8080/api/auth/local/register',
                 {
                     login: this.credentials.login,
                     password: this.credentials.password
@@ -62,13 +62,6 @@ export default Vue.extend({
                 })
                 .then((res: AxiosResponse) => {
                     if (!res.data.error.name) {
-                        if (res.data.data.token) {
-                            this.$store.commit('setToken', res.data.data.token)
-                            if (this.$store.state.token) {
-                                (this as any).$cookie.set('token', this.$store.state.token, 1)
-                                this.$router.push('/')
-                            }
-                        }
                     } else {
                         this.$store.commit('setError', res.data.error.message)
                     }

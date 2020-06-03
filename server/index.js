@@ -39,7 +39,11 @@ app.all('*', (req, res) => {
 })
 
 db.initHistory()
-    .then(db.initUsers)
+    .then(() => {
+        const init = db.initUsers()
+        require('./serial/index')
+        return init
+    })
     .catch(console.log)
 
 app.listen(process.env.PORT, () => {

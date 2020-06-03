@@ -65,7 +65,8 @@ export default Vue.extend({
         items: [
             { title: 'Главная', icon: 'mdi-view-dashboard', href: '/' },
             { title: 'История', icon: 'mdi-history', href: '/history' },
-            { title: 'Выйти', icon: 'mdi-exit-run', href: '/' }
+            { title: 'Управление', icon: 'mdi-cog-outline', href: '/settings' },
+            { title: 'Выйти', icon: 'mdi-exit-run', href: '/out' }
         ]
     })
 })

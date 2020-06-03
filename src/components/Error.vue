@@ -1,6 +1,6 @@
 <template>
     <div class="error">
-        <v-alert v-if="$store.getters.isErrorMessage" prominent type="error">
+        <v-alert v-if="$store.getters.isErrorMessage" prominent type="error" elevation="2">
           <v-row align="center">
             <v-col class="grow">{{ $store.getters.getErrorMessage }}</v-col>
             <v-col class="shrink">

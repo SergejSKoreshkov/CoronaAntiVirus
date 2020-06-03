@@ -23,13 +23,15 @@ export default Vue.extend({
         if (color) {
             this.$store.commit('color', color)
         }
-    },
-    mounted () {
+
         if (!this.$store.getters.isAuthenticated) {
             this.$store.commit('setToken', this.$route.query.token || (this as any).$cookie.get('token'))
 
             if (!this.$store.getters.isAuthenticated) this.$router.push('/login')
         }
+
+        this.$vuetify.theme.dark = true
+        this.$store.commit('color', 'blue-grey darken-3')
     },
     methods: {
         signOut () {

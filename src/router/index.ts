@@ -3,6 +3,8 @@ import VueRouter, { RouteConfig } from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
 import History from '../views/History.vue'
 import Login from '../views/Login.vue'
+import Settings from '../views/Settings.vue'
+import Out from '../views/Out.vue'
 
 Vue.use(VueRouter)
 
@@ -21,6 +23,16 @@ const routes: Array<RouteConfig> = [
         path: '/login',
         name: 'Login',
         component: Login
+    },
+    {
+        path: '/settings',
+        name: 'Settings',
+        component: Settings
+    },
+    {
+        path: '/out',
+        name: 'Out',
+        component: Out
     }
 ]
 

@@ -1,35 +1,29 @@
 <template>
     <div class="historylist">
-                <v-card elevation="2" class="elevation-12">
+        <v-card elevation="2" class="elevation-12">
                     <v-toolbar
                         :color="$store.state.color"
                         dark
                         elevation="0"
                     >
-                        <v-toolbar-title>История</v-toolbar-title>
+                        <v-toolbar-title>Пользователи</v-toolbar-title>
                         <v-spacer />
                     </v-toolbar>
                     <v-card-text>
       <v-data-table
         :headers="headers"
         :items="dataset"
-        class="elevation-0"
         :loading="loading"
       >
-        <template v-slot:item.temp="{ item }">
-          <v-chip :color="getColorFromTemp(
-              $store.state.minimalTemp,
-              $store.state.maximalTemp,
-              $store.state.mediumTemp,
-              item.temp
-            )" dark>{{ item.temp }}</v-chip>
-        </template>
-        <template v-slot:item.time="{ item }">
-         {{ new Date(item.time).toLocaleString() }}
+        <template v-slot:item.actions="{ item }">
+            <v-icon
+                small
+                @click="deleteItem(item.login)"
+            >mdi-delete</v-icon>
         </template>
       </v-data-table>
                     </v-card-text>
-                </v-card>
+        </v-card>
     </div>
 </template>
 
@@ -45,9 +39,32 @@ export default Vue.extend({
                     ? temp > tempMax ? 'red' : 'orange' : 'lime' : 'light-blue'
         },
 
+        deleteItem (login: string) {
+            if (confirm(`Delete user ${login}`)) {
+                axios.delete(
+                    'http://localhost:8080/api/users',
+                    {
+                        data: { login },
+                        headers: {
+                            token: this.$store.state.token
+                        }
+                    } as any).then((response: any) => {
+                    console.log(response)
+                    if (response.data.error.message) { } else {
+                        this.dataset = response.data.data.map((el: any) => {
+                            el.actions = true
+                            return el
+                        })
+                        this.loading = false
+                    }
+                })
+                    .catch(console.log)
+            }
+        },
+
         updateData () {
             axios.get(
-                'http://localhost:8080/api/history',
+                'http://localhost:8080/api/users',
                 {
                     headers: {
                         token: this.$store.state.token
@@ -55,7 +72,7 @@ export default Vue.extend({
                 }).then((response: any) => {
                 if (response.data.error.message) { } else {
                     this.dataset = response.data.data.map((el: any) => {
-                        el.temp = parseFloat(el.temp)
+                        el.actions = true
                         return el
                     })
                     this.loading = false
@@ -68,7 +85,7 @@ export default Vue.extend({
         this.updateData()
         this.interval = setInterval(() => {
             this.updateData()
-        }, 1000)
+        }, 2000)
     },
     beforeDestroy () {
         clearInterval(this.interval)
@@ -78,16 +95,13 @@ export default Vue.extend({
         loading: true,
         headers: [
             {
-                text: 'Номер турникета',
+                text: 'Пользователь',
                 align: 'start',
                 sortable: true,
-                value: 'gate_id'
+                sort: true,
+                value: 'login'
             },
-            { text: 'Имя', value: 'first_name' },
-            { text: 'Фамилия', value: 'last_name' },
-            { text: 'Номер пропуска', value: 'card_id' },
-            { text: 'Температура', value: 'temp' },
-            { text: 'Время', value: 'time' }
+            { text: 'Действия', value: 'actions', sortable: false }
         ],
         dataset: []
     })

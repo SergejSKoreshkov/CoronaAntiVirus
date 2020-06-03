@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios from 'axios'
 
 Vue.use(Vuex)
 
@@ -21,7 +21,8 @@ interface VuexStore {
 interface RequestData {
   url: string;
   data: any;
-  method: <T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig | undefined) => Promise<R>;
+//   method: <T = any, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig | undefined) => Promise<R>;
+  method: any;
 }
 
 export default new Vuex.Store({
@@ -67,38 +68,6 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        makeRequest ({ commit }: any, { url, data, method }: RequestData) {
-            return new Promise((resolve, reject) => {
-                method(url, {
-                    login: data.login,
-                    password: data.password
-                } as any)
-                    .then((res: any) => {
-                        if (!res.data.error.name) {
-                            if (res.data.data.token) {
-                                commit('setToken', res.data.data.token)
-                                resolve()
-                            }
-                        } else {
-                            commit('setError', res.data.error.message)
-                            reject(res.data.error.message)
-                        }
-                    })
-                    .catch((err: any) => {
-                        commit('setError', err.response?.data.error.message || err.message)
-                        reject(err.response?.data.error.message || err.message)
-                    })
-            })
-        },
-        loginLocal ({ dispatch }: any, data: any) {
-            return dispatch('makeRequest', { url: 'http://localhost:8080/api/auth/local', data, method: axios.post })
-        },
-        registerLocal ({ dispatch }: any, data: any) {
-            return dispatch('makeRequest', { url: 'http://localhost:8080/api/auth/local/register', data, method: axios.post })
-        },
-        fetchData ({ dispatch }: any, { data, limit, offset }: any) {
-            return dispatch('makeRequest', { url: 'http://localhost:8080/api/history', data, method: axios.get })
-        }
     },
     modules: {
     }
