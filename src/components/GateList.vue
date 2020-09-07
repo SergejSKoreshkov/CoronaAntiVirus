@@ -41,7 +41,7 @@ export default Vue.extend({
         getColorFromTemp (tempMin: number, tempMax: number, tempMed: number, temp: number): string {
             return temp > tempMin
                 ? temp > tempMed
-                    ? temp > tempMax ? 'red' : 'orange' : 'lime' : 'light-blue'
+                    ? temp > tempMax ? 'red' : 'orange' : 'green darken-2' : 'light-blue'
         },
 
         updateData () {

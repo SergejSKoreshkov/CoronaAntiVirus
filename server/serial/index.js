@@ -25,6 +25,20 @@ function * deviceGenerator () {
     }
 }
 
+const date = new Date()
+let dateNow = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+
+setInterval(() => {
+    const currentDate = new Date()
+    const dateNew = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`
+    if (dateNew !== dateNow) {
+        dateNow = dateNew
+    }
+    currentDate.setDate(currentDate.getDate() - 10)
+    const dateOld = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`
+    db.removeHistory(dateOld)
+}, 60000)
+
 let generator = deviceGenerator()
 
 const startMonitoring = (devicePort) => {
@@ -45,7 +59,8 @@ const startMonitoring = (devicePort) => {
                         personalData[1], // gate id
                         personalData[0], // card id
                         personalData[2], // temp
-                        Date.now() // time
+                        Date.now(), // time
+                        dateNow
                     ]
                 } else {
                     return {}

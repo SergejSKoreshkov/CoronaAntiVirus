@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const authorize = require('../controllers/auth/authorize')
 const sendHistory = require('../controllers/getHistory')
+const sendDays = require('../controllers/getDays')
 const sendActive = require('../controllers/getActive')
 const sendUsers = require('../controllers/getUsers')
 const removeUser = require('../controllers/removeUser')
@@ -10,6 +11,13 @@ router
     .get(
         authorize,
         sendHistory
+    )
+
+router
+    .route('/dates')
+    .get(
+        authorize,
+        sendDays
     )
 
 router

@@ -1,5 +1,43 @@
 <template>
     <div class="historylist">
+                <v-date-picker
+                    v-model="selectedDate"
+                    :allowed-dates="allowedDates"
+                    width="100%"
+                    @change="updateData"
+                ></v-date-picker>
+                <v-divider></v-divider>
+                <v-row>
+                    <v-col cols="4">
+                        <v-text-field
+                            placeholder="Номур турникета"
+                            outlined
+                            v-model="filterGate"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="4">
+                        <v-text-field
+                            placeholder="Номур пропуска"
+                            outlined
+                            v-model="filterId"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col cols="4" class="d-flex">
+                        <v-text-field
+                            placeholder="Температура"
+                            outlined
+                            class="pr-2 col-8"
+                            v-model="filterTemp"
+                            type="number"
+                        ></v-text-field>
+                        <v-spacer></v-spacer>
+                        <v-switch
+                            :label="selectHighTemp ? 'Выше' : 'Ниже'"
+                            v-model="selectHighTemp"
+                        ></v-switch>
+                    </v-col>
+                </v-row>
+                <v-divider></v-divider>
                 <v-card elevation="2" class="elevation-12">
                     <v-toolbar
                         :color="$store.state.color"
@@ -12,7 +50,7 @@
                     <v-card-text>
       <v-data-table
         :headers="headers"
-        :items="dataset"
+        :items="filteredDataset"
         class="elevation-0"
         :loading="loading"
       >
@@ -42,12 +80,29 @@ export default Vue.extend({
         getColorFromTemp (tempMin: number, tempMax: number, tempMed: number, temp: number): string {
             return temp > tempMin
                 ? temp > tempMed
-                    ? temp > tempMax ? 'red' : 'orange' : 'lime' : 'light-blue'
+                    ? temp > tempMax ? 'red' : 'orange' : 'green darken-2' : 'light-blue'
         },
-
-        updateData () {
+        allowedDates (date: string) {
+            return this.dates.includes(date)
+        },
+        getDates () {
             axios.get(
-                'http://localhost:8080/api/history',
+                'http://localhost:8080/api/dates',
+                {
+                    headers: {
+                        token: this.$store.state.token
+                    }
+                }).then((response: any) => {
+                if (response.data.error.message) { } else {
+                    this.dates = response.data.data.map((el: any) => el.day)
+                    this.loading = false
+                }
+            })
+        },
+        updateData () {
+            this.loading = true
+            axios.get(
+                `http://localhost:8080/api/history?date=${this.selectedDate}`,
                 {
                     headers: {
                         token: this.$store.state.token
@@ -65,17 +120,40 @@ export default Vue.extend({
         }
     },
     mounted () {
+        this.getDates()
         this.updateData()
-        this.interval = setInterval(() => {
-            this.updateData()
-        }, 1000)
     },
     beforeDestroy () {
         clearInterval(this.interval)
     },
+    computed: {
+        filteredDataset () {
+            return this.dataset.filter((el: any) => {
+                let flag = true
+                if (this.filterGate.length > 0) {
+                    flag = el.gate_id.includes(this.filterGate)
+                }
+                if (this.filterId.length > 0) {
+                    flag = flag && el.card_id.includes(this.filterId)
+                }
+                if (this.filterTemp > 0) {
+                    flag = flag && this.selectHighTemp
+                        ? el.temp > this.filterTemp
+                        : el.temp < this.filterTemp
+                }
+                return flag
+            })
+        }
+    },
     data: () => ({
         interval: 0,
+        dates: [] as string[],
         loading: true,
+        selectedDate: '2020-09-03',
+        selectHighTemp: false,
+        filterGate: '',
+        filterId: '',
+        filterTemp: 0,
         headers: [
             {
                 text: 'Номер турникета',
