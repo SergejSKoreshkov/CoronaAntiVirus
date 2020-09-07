@@ -98,6 +98,11 @@ usbDetect.on('add', devices => {
         })
 })
 
+console.log(process.env.USE_DEVICE)
+if (process.env.USE_DEVICE) {
+    startMonitoring(process.env.USE_DEVICE)
+}
+
 usbDetect.on('remove', () => {
     clearInterval(interval)
     initialized = false
