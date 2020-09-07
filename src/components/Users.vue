@@ -42,7 +42,7 @@ export default Vue.extend({
         deleteItem (login: string) {
             if (confirm(`Delete user ${login}`)) {
                 axios.delete(
-                    'http://localhost:8080/api/users',
+                    '/api/users',
                     {
                         data: { login },
                         headers: {
@@ -64,7 +64,7 @@ export default Vue.extend({
 
         updateData () {
             axios.get(
-                'http://localhost:8080/api/users',
+                '/api/users',
                 {
                     headers: {
                         token: this.$store.state.token

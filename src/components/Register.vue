@@ -52,7 +52,7 @@ export default Vue.extend({
     methods: {
         loginLocal () {
             axios.post(
-                'http://localhost:8080/api/auth/local/register',
+                '/api/auth/local/register',
                 {
                     login: this.credentials.login,
                     password: this.credentials.password

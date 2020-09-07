@@ -87,7 +87,7 @@ export default Vue.extend({
         },
         getDates () {
             axios.get(
-                'http://localhost:8080/api/dates',
+                '/api/dates',
                 {
                     headers: {
                         token: this.$store.state.token
@@ -102,7 +102,7 @@ export default Vue.extend({
         updateData () {
             this.loading = true
             axios.get(
-                `http://localhost:8080/api/history?date=${this.selectedDate}`,
+                `/api/history?date=${this.selectedDate}`,
                 {
                     headers: {
                         token: this.$store.state.token

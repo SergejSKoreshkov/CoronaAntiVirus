@@ -46,7 +46,7 @@ export default Vue.extend({
 
         updateData () {
             axios.get(
-                'http://localhost:8080/api/active',
+                '/api/active',
                 {
                     headers: {
                         token: this.$store.state.token
